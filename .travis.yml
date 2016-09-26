@@ -21,7 +21,6 @@ matrix:
       python: 3.5
       os: osx
   allow_failures:
-    - python: pypy
     - python: pypy3
 
 install:
