@@ -25,6 +25,13 @@ matrix:
     - python: pypy3
 
 install:
+  - |
+      if [ "$TRAVIS_PYTHON_VERSION" = "pypy" ]; then
+        pyenv install --skip-existing pypy-5.4.1
+#        virtualenv --python="$PYENV_ROOT/versions/pypy-$PYPY_VERSION/bin/python" "$HOME/virtualenvs/pypy-$PYPY_VERSION"
+#        source "$HOME/virtualenvs/pypy-$PYPY_VERSION/bin/activate"
+      fi
+
   - if [[ $TRAVIS_OS_NAME == osx ]]; then brew install openssl; fi
   - if [[ $TRAVIS_OS_NAME == osx ]]; then export LDFLAGS="-L$(brew --prefix openssl)/lib" CFLAGS="-I$(brew --prefix openssl)/include"; fi
   - virtualenv --python=python env
