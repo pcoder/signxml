@@ -594,7 +594,7 @@ class XMLVerifier(XMLSignatureProcessor):
 
     def verify(self, data, require_x509=True, x509_cert=None, cert_subject_name=None, ca_pem_file=None, ca_path=None,
                hmac_key=None, validate_schema=True, parser=None, uri_resolver=None, id_attribute=None,
-               expect_references=1):
+               expect_references=1, rsa_key_value=None):
         """
         Verify the XML signature supplied in the data and return the XML node signed by the signature, or raise an
         exception if the signature is not valid. By default, this requires the signature to be generated using a valid
@@ -749,7 +749,9 @@ class XMLVerifier(XMLSignatureProcessor):
                 raise InvalidSignature("Signature mismatch (HMAC)")
         else:
             key_value = signature.find("ds:KeyInfo/ds:KeyValue", namespaces=namespaces)
-            if key_value is None:
+            if rsa_key_value is not None:
+                key_value = rsa_key_value
+            elif key_value is None:
                 raise InvalidInput("Expected to find either KeyValue or X509Data XML element in KeyInfo")
 
             self._verify_signature_with_pubkey(signed_info_c14n, raw_signature, key_value, signature_alg)
